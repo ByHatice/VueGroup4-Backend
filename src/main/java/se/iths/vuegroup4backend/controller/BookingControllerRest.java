@@ -99,6 +99,4 @@ public class BookingControllerRest {
             return ResponseEntity.notFound().build(); // 404 Not Found
         }
     }
-
-
 }
