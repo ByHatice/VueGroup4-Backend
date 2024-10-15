@@ -1,6 +1,7 @@
 package se.iths.vuegroup4backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.iths.vuegroup4backend.entity.BookingEntity;
@@ -52,7 +53,7 @@ public class BookingControllerRest {
     }
 
     //Change product
-    @PatchMapping("/booking/{id}")
+    /*@PatchMapping("/booking/{id}")
     ResponseEntity<Void> updateBooking(@RequestBody BookingEntity updatedBooking, @PathVariable Long id) {
         Optional<BookingEntity> optionalBooking = bookingRepository.findById(id);
 
@@ -70,5 +71,34 @@ public class BookingControllerRest {
             // If the user with the given ID does not exist, return a response with HTTP status code 404 (Not Found)
             return ResponseEntity.notFound().build();
         }
+    }*/
+
+    @PatchMapping("/booking/{id}")
+    public ResponseEntity<String> updateBooking(@RequestBody BookingEntity updatedBooking, @PathVariable Long id) {
+        Optional<BookingEntity> optionalBooking = bookingRepository.findById(id);
+
+        if (optionalBooking.isPresent()) {
+            BookingEntity existingBooking = optionalBooking.get();
+
+            // Beräkna tillgängliga platser
+            int availableSeats = existingBooking.getTotalSeats() - existingBooking.getBookedSeats();
+
+            // Kontrollera om det finns tillräckligt med tillgängliga platser för uppdateringen
+            if (updatedBooking.getBookedSeats() <= availableSeats) {
+                // Uppdatera antalet bokade platser
+                existingBooking.setBookedSeats(existingBooking.getBookedSeats() + updatedBooking.getBookedSeats());
+
+                bookingRepository.save(existingBooking);
+                return ResponseEntity.ok().build(); // 200 OK
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("Inte tillräckligt med platser tillgängliga.");
+            }
+        } else {
+            // Om bokningen med det angivna ID:t inte finns
+            return ResponseEntity.notFound().build(); // 404 Not Found
+        }
     }
+
+
 }
