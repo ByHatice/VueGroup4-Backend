@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -17,6 +18,7 @@ public class BookingEntity {
     private Long swapiId;
     private int bookedSeats;
     private int totalSeats;
+    private LocalDateTime bookingTime;
 
     public BookingEntity() {
     }

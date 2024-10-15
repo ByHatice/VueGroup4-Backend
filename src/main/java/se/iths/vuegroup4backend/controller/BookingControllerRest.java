@@ -1,5 +1,6 @@
 package se.iths.vuegroup4backend.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import se.iths.vuegroup4backend.entity.BookingEntity;
@@ -11,6 +12,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api")
 public class BookingControllerRest {
+    @Autowired
     BookingRepository bookingRepository;
 
     public BookingControllerRest(BookingRepository bookingRepository) {
@@ -36,10 +38,17 @@ public class BookingControllerRest {
         return bookingRepository.findById(id);
     }
 
+    // read all movies by id
+
+    @GetMapping("/swapi/{swapiId}")
+    public List<BookingEntity> getBookingsBySwapiId(@PathVariable Long swapiId) {
+        return bookingRepository.findAllBySwapiId(swapiId);
+    }
+
     //Delete product
-    @DeleteMapping("/booking/{id}")
-    public void deleteBooking(@PathVariable("id") Long id) {
-        bookingRepository.deleteById(id);
+    @DeleteMapping("/swapi/{swapiId}")
+    public void deleteBooking(@PathVariable("swapiId") Long swapiId) {
+        bookingRepository.deleteByswapiId(swapiId);
     }
 
     //Change product
