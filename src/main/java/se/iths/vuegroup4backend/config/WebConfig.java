@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
         @Override
         public void addCorsMappings(CorsRegistry registry) {
             registry.addMapping("/api/**")
-                    .allowedOrigins("http://localhost:5174")  // Vue-serverns URL
+                    .allowedOrigins("http://localhost:5174")
                     .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH");
         }
     }
